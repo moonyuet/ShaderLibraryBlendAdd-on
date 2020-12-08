@@ -8,7 +8,9 @@
 Steps for installation
 
 1. Edit > Preference
+
 ![alt text](https://github.com/moonyuet/ShaderLibraryBlendAdd-on/blob/main/shaderLibrary/Step1.JPG?raw=true)
+
 
 2. Add-On> Click "Install"
 ![alt text](https://github.com/moonyuet/ShaderLibraryBlendAdd-on/blob/main/shaderLibrary/Step2.JPG?raw=true)
