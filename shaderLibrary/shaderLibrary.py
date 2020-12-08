@@ -77,7 +77,7 @@ class GLASS_SHADER(bpy.types.Operator):
         RGB_node = mat_glass.node_tree.nodes.new('ShaderNodeRGB')
         RGB_node.location = (-800,150)
         mat_glass.node_tree.links.new(RGB_node.outputs[0],glass_node.inputs[0])
-        RGB_node.outputs[0].default_value = (0.22353,0.22353,0.22353,1)
+        RGB_node.outputs[0].default_value = (1.0,1.0,1.0,1)
         
             
         return {'FINISHED'}
