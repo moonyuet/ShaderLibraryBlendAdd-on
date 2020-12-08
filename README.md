@@ -1,4 +1,4 @@
-# ShaderLibraryBlendAdd-on
+# Blender ShaderLibrary Add-on
 
 ![alt text](https://github.com/moonyuet/ShaderLibraryBlendAdd-on/blob/main/shaderLibrary/shaderLibraryCapture.jpg?raw=true)
 
