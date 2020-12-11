@@ -1,16 +1,17 @@
 bl_info ={
     "name": "Material Library",
     "author" : "Kayla Man",
-    "version" : (1,1),
-    "blender": (2, 91, 0),
-    "location" : "View3D > Add > Material > ShaderLibrary",
+    "version" : (1,0),
+    "blender" : (2,91,0),
+    "location" : "View3D > Add > Mesh > New Object",
     "description" : "Stores some materials",
     "warning": "", 
     "wiki_url": "",
-    "category": "Material Creation"
+    "category": "MaterialCreation"
 }
 
 import bpy
+from bpy.props import FloatProperty, PointerProperty
 
 class ShaderMainPanel(bpy.types.Panel):
     
@@ -22,6 +23,9 @@ class ShaderMainPanel(bpy.types.Panel):
     
     def draw(self, context):
         layout = self.layout
+        
+        obj = bpy.context.active_object
+        matref =obj.active_material
         
         row = layout.row()
         row.label(text= "Select a Shader to be added")
@@ -43,6 +47,10 @@ class ShaderMainPanel(bpy.types.Panel):
         row.operator('shader.brass_operator')
         row=layout.row()
         row.operator('shader.plastic_operator')
+        row=layout.row()
+        layout.prop(matref, "name")
+        row=layout.row()
+        row.prop(matref.slot_setting, "rough")  
 
         
 class GLASS_SHADER(bpy.types.Operator):
@@ -55,8 +63,7 @@ class GLASS_SHADER(bpy.types.Operator):
         
        
         activeObject = bpy.context.active_object
-        
-     
+          
         mat_glass = bpy.data.materials.new(name="Glass")
 
         mat_glass.use_nodes = True
@@ -71,14 +78,9 @@ class GLASS_SHADER(bpy.types.Operator):
 
         glass_node = mat_glass.node_tree.nodes.new('ShaderNodeBsdfGlass')
         glass_node.location = (-600,0)
+        glass_node.inputs[0].default_value=(1,1,1,1)
         glass_node.inputs[1].default_value=0.15
         mat_glass.node_tree.links.new(glass_node.outputs[0],mat_output.inputs[0])
-        
-        RGB_node = mat_glass.node_tree.nodes.new('ShaderNodeRGB')
-        RGB_node.location = (-800,150)
-        mat_glass.node_tree.links.new(RGB_node.outputs[0],glass_node.inputs[0])
-        RGB_node.outputs[0].default_value = (1.0,1.0,1.0,1)
-        
             
         return {'FINISHED'}
     
@@ -88,28 +90,21 @@ class GOLD_SHADER(bpy.types.Operator):
     
     def execute(self,context):
         
-        activeObject = bpy.context.active_object
-       
+        activeObject = bpy.context.active_object        
         
         mat_gold = bpy.data.materials.new(name="Gold")
         
         mat_gold.use_nodes= True
         
         activeObject.data.materials.append(mat_gold)
+        
         goldNode = mat_gold.node_tree.nodes.get('Principled BSDF')
+        goldNode.inputs[0].default_value = (1.0,0.760508,0.327774,1)
         goldNode.inputs[4].default_value=1.0
         goldNode.inputs[5].default_value =0.0
         goldNode.inputs[7].default_value =0.0
         goldNode.inputs[14].default_value =0.47
         
-        mat_output = mat_gold.node_tree.nodes.get("Material Output")
-        
-        mat_output.location = (400,0)
-        
-        RGB_node = mat_gold.node_tree.nodes.new('ShaderNodeRGB')
-        RGB_node.location = (-400,0)
-        mat_gold.node_tree.links.new(RGB_node.outputs[0],goldNode.inputs[0])
-        RGB_node.outputs[0].default_value = (1.0,0.760508,0.327774,1)
         return {'FINISHED'}
 
 class SILVER_SHADER(bpy.types.Operator):
@@ -119,7 +114,7 @@ class SILVER_SHADER(bpy.types.Operator):
     def execute(self,context):
         
         activeObject = bpy.context.active_object
-       
+      
         
         mat_silver = bpy.data.materials.new(name="Silver")
         
@@ -127,19 +122,12 @@ class SILVER_SHADER(bpy.types.Operator):
         
         activeObject.data.materials.append(mat_silver)
         silverNode = mat_silver.node_tree.nodes.get('Principled BSDF')
+        silverNode.inputs[0].default_value = (0.973456,0.955983,0.913104,1)
         silverNode.inputs[4].default_value=1.0
         silverNode.inputs[5].default_value =0.0
         silverNode.inputs[7].default_value =0.0
         silverNode.inputs[14].default_value =1.35
         
-        mat_output = mat_silver.node_tree.nodes.get("Material Output")
-        
-        mat_output.location = (400,0)
-       
-        RGB_node = mat_silver.node_tree.nodes.new('ShaderNodeRGB')
-        RGB_node.location = (-400,0)
-        mat_silver.node_tree.links.new(RGB_node.outputs[0], silverNode.inputs[0])
-        RGB_node.outputs[0].default_value = (0.973456,0.955983,0.913104,1)
         return {'FINISHED'}
     
 class ALUMINIUM_SHADER(bpy.types.Operator):
@@ -149,26 +137,19 @@ class ALUMINIUM_SHADER(bpy.types.Operator):
     def execute(self,context):
         
         activeObject = bpy.context.active_object
-        
-        
+      
         mat_alum = bpy.data.materials.new(name="Aluminium")
         
         mat_alum.use_nodes = True
         
         activeObject.data.materials.append(mat_alum)
         AlumNode = mat_alum.node_tree.nodes.get('Principled BSDF')
+        AlumNode.inputs[0].default_value = (0.913118,0.921587,0.921591,1)
         AlumNode.inputs[4].default_value=1.0
         AlumNode.inputs[5].default_value =0.0
         AlumNode.inputs[7].default_value =0.0
         AlumNode.inputs[14].default_value =1.44
-        mat_output = mat_alum.node_tree.nodes.get("Material Output")
         
-        mat_output.location = (400,0)
-       
-        RGB_node = mat_alum.node_tree.nodes.new('ShaderNodeRGB')
-        RGB_node.location = (-400,0)
-        mat_alum.node_tree.links.new(RGB_node.outputs[0], AlumNode.inputs[0])
-        RGB_node.outputs[0].default_value = (0.913118,0.921587,0.921591,1)
         return {'FINISHED'}
     
 class IRON_SHADER(bpy.types.Operator):
@@ -178,8 +159,7 @@ class IRON_SHADER(bpy.types.Operator):
     def execute(self,context):
         
         activeObject = bpy.context.active_object
-        
-        
+            
         mat_iron = bpy.data.materials.new(name="Iron")
         
         mat_iron.use_nodes = True
@@ -187,19 +167,12 @@ class IRON_SHADER(bpy.types.Operator):
         activeObject.data.materials.append(mat_iron)
         
         ironNode = mat_iron.node_tree.nodes.get('Principled BSDF')
+        ironNode.inputs[0].default_value = (0.552015,0.571113,0.571121,1)
         ironNode.inputs[4].default_value=1.0
         ironNode.inputs[5].default_value =0.0
         ironNode.inputs[7].default_value =0.0
         ironNode.inputs[14].default_value =2.95
         
-        mat_output = mat_iron.node_tree.nodes.get("Material Output")
-        
-        mat_output.location = (400,0)
-       
-        RGB_node = mat_iron.node_tree.nodes.new('ShaderNodeRGB')
-        RGB_node.location = (-400,0)
-        mat_iron.node_tree.links.new(RGB_node.outputs[0], ironNode.inputs[0])
-        RGB_node.outputs[0].default_value = (0.552015,0.571113,0.571121,1)
         return {'FINISHED'}
     
 class COPPER_SHADER(bpy.types.Operator):
@@ -209,8 +182,7 @@ class COPPER_SHADER(bpy.types.Operator):
     def execute(self,context):
         
         activeObject = bpy.context.active_object
-        
-        
+           
         mat_copper = bpy.data.materials.new(name="Copper")
         
         mat_copper.use_nodes = True
@@ -218,19 +190,12 @@ class COPPER_SHADER(bpy.types.Operator):
         activeObject.data.materials.append(mat_copper)
         
         copperNode = mat_copper.node_tree.nodes.get('Principled BSDF')
+        copperNode.inputs[0].default_value = (0.955969,0.630761,0.527113,1)
         copperNode.inputs[4].default_value=1.0
         copperNode.inputs[5].default_value =0.0
         copperNode.inputs[7].default_value =0.0
         copperNode.inputs[14].default_value =2.43
         
-        mat_output = mat_copper.node_tree.nodes.get("Material Output")
-        
-        mat_output.location = (400,0)
-       
-        RGB_node = mat_copper.node_tree.nodes.new('ShaderNodeRGB')
-        RGB_node.location = (-400,0)
-        mat_copper.node_tree.links.new(RGB_node.outputs[0], copperNode.inputs[0])
-        RGB_node.outputs[0].default_value = (0.955969,0.630761,0.527113,1)
         return {'FINISHED'}
     
 class TITANIUM_SHADER(bpy.types.Operator):
@@ -240,8 +205,7 @@ class TITANIUM_SHADER(bpy.types.Operator):
     def execute(self,context):
         
         activeObject = bpy.context.active_object
-       
-        
+            
         mat_titan = bpy.data.materials.new(name="Titanium")
         
         mat_titan.use_nodes = True
@@ -249,19 +213,12 @@ class TITANIUM_SHADER(bpy.types.Operator):
         activeObject.data.materials.append(mat_titan)
         
         TitanNode = mat_titan.node_tree.nodes.get('Principled BSDF')
+        TitanNode.inputs[0].default_value = (0.319,0.319,0.319,1)
         TitanNode.inputs[4].default_value=1.0
         TitanNode.inputs[5].default_value =0.0
         TitanNode.inputs[7].default_value =0.0
         TitanNode.inputs[14].default_value =2.16
         
-        mat_output = mat_titan.node_tree.nodes.get("Material Output")
-        
-        mat_output.location = (400,0)
-        
-        RGB_node = mat_titan.node_tree.nodes.new('ShaderNodeRGB')
-        RGB_node.location = (-400,0)
-        mat_titan.node_tree.links.new(RGB_node.outputs[0], TitanNode.inputs[0])
-        RGB_node.outputs[0].default_value = (0.319,0.319,0.319,1)
         return{'FINISHED'}
 
 class BRASS_SHADER(bpy.types.Operator):
@@ -278,19 +235,12 @@ class BRASS_SHADER(bpy.types.Operator):
         activeObject.data.materials.append(mat_brass)
         
         BrassNode = mat_brass.node_tree.nodes.get('Principled BSDF')
+        BrassNode.inputs[0].default_value = (0.955969,0.838804,0.527112,1)
         BrassNode.inputs[4].default_value=1.0
         BrassNode.inputs[5].default_value =0.0
         BrassNode.inputs[7].default_value =0.0
         BrassNode.inputs[14].default_value =0.46
         
-        mat_output = mat_brass.node_tree.nodes.get("Material Output")
-        
-        mat_output.location = (400,0)
-        
-        RGB_node = mat_brass.node_tree.nodes.new('ShaderNodeRGB')
-        RGB_node.location = (-400,0)
-        mat_brass.node_tree.links.new(RGB_node.outputs[0], BrassNode.inputs[0])
-        RGB_node.outputs[0].default_value = (0.955969,0.838804,0.527112,1)
         return{'FINISHED'}
 
 class PLASTIC_SHADER(bpy.types.Operator):
@@ -300,8 +250,7 @@ class PLASTIC_SHADER(bpy.types.Operator):
     def execute(self, context):
         
         activeObject = bpy.context.active_object
-        
-        
+      
         mat_plastic = bpy.data.materials.new(name="Plastic")
         
         mat_plastic.use_nodes = True
@@ -322,9 +271,36 @@ class PLASTIC_SHADER(bpy.types.Operator):
         RGB_node.location = (-400,0)
         mat_plastic.node_tree.links.new(RGB_node.outputs[0], PlasticNode.inputs[0])
         RGB_node.outputs[0].default_value = (0.011612,0.011612,0.011612,1)
+        
         return{'FINISHED'}
 
 
+def updateRough(self, context):
+    
+    mat = self.id_data
+    node = mat.node_tree.nodes
+    nodes = [k for k in node
+            if isinstance(k, bpy.types.ShaderNodeBsdfPrincipled)]            
+    for k in nodes :
+        k.inputs[7].default_value = self.rough
+        return k
+        
+    node_glass = [g for g in node
+                    if isinstance(g,bpy.types.ShaderNodeBsdfGlass)]     
+    
+    for g in node_glass:
+        g.inputs[1].default_value=self.rough
+        return g
+        
+class roughSet(bpy.types.PropertyGroup):
+
+    rough: FloatProperty(
+            name="Roughness",
+            subtype='NONE',
+            default=0.0,
+            min=0, max=1,
+            update = updateRough) 
+            
 def register():
     bpy.utils.register_class(ShaderMainPanel)
     bpy.utils.register_class(GLASS_SHADER)
@@ -336,6 +312,8 @@ def register():
     bpy.utils.register_class(TITANIUM_SHADER)
     bpy.utils.register_class(BRASS_SHADER)
     bpy.utils.register_class(PLASTIC_SHADER)
+    bpy.utils.register_class(roughSet)
+    bpy.types.Material.slot_setting=PointerProperty(type=roughSet)
     
 def unregister():
     bpy.utils.unregister_class(ShaderMainPanel)
@@ -348,7 +326,9 @@ def unregister():
     bpy.utils.register_class(TITANIUM_SHADER)
     bpy.utils.register_class(BRASS_SHADER)
     bpy.utils.register_class(PLASTIC_SHADER)
-  
+    bpy.utils.register_class(roughSet)
+    del bpy.types.Material.slot_setting
+
 if __name__ == "__main__":
     register()
     
