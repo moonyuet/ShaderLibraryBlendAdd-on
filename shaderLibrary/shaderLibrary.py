@@ -317,16 +317,16 @@ def register():
     
 def unregister():
     bpy.utils.unregister_class(ShaderMainPanel)
-    bpy.utils.register_class(GLASS_SHADER)
-    bpy.utils.register_class(GOLD_SHADER)
-    bpy.utils.register_class(SILVER_SHADER)
-    bpy.utils.register_class(ALUMINIUM_SHADER)
-    bpy.utils.register_class(IRON_SHADER)
-    bpy.utils.register_class(COPPER_SHADER)
-    bpy.utils.register_class(TITANIUM_SHADER)
-    bpy.utils.register_class(BRASS_SHADER)
-    bpy.utils.register_class(PLASTIC_SHADER)
-    bpy.utils.register_class(roughSet)
+    bpy.utils.unregister_class(GLASS_SHADER)
+    bpy.utils.unregister_class(GOLD_SHADER)
+    bpy.utils.unregister_class(SILVER_SHADER)
+    bpy.utils.unregister_class(ALUMINIUM_SHADER)
+    bpy.utils.unregister_class(IRON_SHADER)
+    bpy.utils.unregister_class(COPPER_SHADER)
+    bpy.utils.unregister_class(TITANIUM_SHADER)
+    bpy.utils.unregister_class(BRASS_SHADER)
+    bpy.utils.unregister_class(PLASTIC_SHADER)
+    bpy.utils.unregister_class(roughSet)
     del bpy.types.Material.slot_setting
 
 if __name__ == "__main__":
