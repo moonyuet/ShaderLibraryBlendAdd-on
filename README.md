@@ -7,7 +7,7 @@
 
 *UPDATE: Added Roughness Parameter and Naming Display for each material
 
-
+![alt text](https://github.com/moonyuet/ShaderLibraryBlendAdd-on/blob/main/shaderLibrary/UPDATE.JPG?raw=true)
 
 Steps for installation
 
