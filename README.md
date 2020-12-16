@@ -5,6 +5,10 @@
 
 *This Add-On is suitable for Blender version 2.91
 
+*UPDATE: Added Roughness Parameter and Naming Display for each material
+
+
+
 Steps for installation
 
 1. Edit > Preference
